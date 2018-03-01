@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Bulls and cows</title>
+    <link href="https://fonts.googleapis.com/css?family=Neucha" rel="stylesheet">
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+        html{
+            background-color: #566270;
+            /* background-color: #6d819c; */
+        }
+        body{
+            background-color: #3E4348;
+            color: #FFFFF3;
+            border: 1px solid #52616a;
+            border-radius: 4px;
+            width: 620px;
+            height: 550px;
+            margin: auto;
+            margin-top: 30px;
+            font-family: 'Neucha', cursive;
+        }
+        #tap{
+            /* border: 1px solid #aaa; */
+            border-radius: 2px 2px 0 0;
+            background-color: #52616a;
+            height: 30px;
+        }
+        .button{
+            display: inline-block;
+            border-radius: 50%;
+            width: 15px;
+            height: 15px;
+            margin-top: 8px;
+            margin-left: 5px;
+            /* border: 1px solid #000; */
+        }
+        .one{
+            background-color: #E53A40;
+        }
+        .two{
+            background-color: #ede574;
+        }
+        .three{
+            background-color: #cbe86b;
+        }
+        #screen{
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+<div id="tap">
+    <div class="button one"></div>
+    <div class="button two"></div>
+    <div class="button three"></div>
+</div>
+<div id="screen">
+    <header>
+        <h1>Bulls and cows</h1>
+    </header>
+    <main>
+        <ol>
+        <script>
+            var i=0;
+            while (i<5) {
+                document.write('<li><input type="text" placeholder="3 Numbers" value="" id="target'+i+'">');
+                document.write('<input type="button" value="Try it" onclick="reference('+i+')">');
+                document.write('<p>result : ');
+                for(var j=0; j<3; j++){
+                    // document.write('<span id="in'+(j+(3*i))+'"></span>');
+                    document.write('<span id="'+i+'_'+j+'"></span> ');
+                }
+                document.write('<span id="out'+i+'"></span></p></li>');
+                i++;
+            }
+        </script>
+        </ol>
+    </main>
+</div>
+</body>
+<script>
+    var list = [0,1,2,3,4,5,6,7,8,9];
+    var defense=[];
+    for (var i = 0; i < 3; i++) {
+        var index = Math.floor(Math.random()*list.length);
+        var ele = list.splice(index, 1)[0];
+        defense.push(ele);
+        // defense[i] = ele;
+    }
+    //arg = i,
+    function reference(arg) {
+        var primitive = document.getElementById('target'+arg).value;
+        var object = primitive.split('');
+        if (object.length !==3) {
+            return alert("only 3 numbers");
+        }
+        if (isNaN(primitive*1)) {
+            return alert("input only numbers");
+        }
+        // if (object[0]===object[1] || object[0]===object[2] || object[1]===object[2]) {
+        //     alert('exist duplicated number');
+        // }
+        for(var i=0; i<object.length; i++){
+            for(var j=0; j<object.length; j++){
+                if (object[i]===object[j] && i!==j) {
+                    return alert('duplicated number exist');
+                }
+            }
+        }
+        
+        var strike = [];
+        var ball = [];
+        for(var i=0; i<3; i++){
+            for(var j=0; j<3; j++){
+                if (defense[i] == object[j]) {
+                    if (i===j) {
+                        strike.push(object[j]);
+                    }else{
+                        ball.push(object[j]);
+                    }
+                }
+            }
+        }
+        // document.getElementById('in').innerHTML = primitive;
+        // document.getElementById('out').innerHTML = " | strike : "+strike+", ball :"+ball;
+
+        if (strike.length !==3) {
+            for(var i=0; i<object.length; i++){
+                document.getElementById(arg+'_'+i).innerHTML = object[i];
+            }
+        }
+        if (strike.length !== 0) {
+            for(var i=0; i<object.length; i++){
+                for(var j=0; j<strike.length; j++){
+                    if (object[i]===strike[j]) {
+                        // document.getElementById(arg+'_'+i).innerHTML = object[i];
+                        document.getElementById(arg+'_'+i).style.color = '#6a60a9';
+                    }
+                }
+            }
+        }
+        if (ball.length !== 0) {
+            for(var i=0; i<object.length; i++){
+                for(var j=0; j<ball.length; j++){
+                    if (object[i]===ball[j]) {
+                        // document.getElementById(arg+'_'+i).innerHTML = object[i];
+                        document.getElementById(arg+'_'+i).style.color = 'orange';
+                    }
+                }
+            }
+        }
+        
+        if (strike.length === 3) {
+            document.getElementById('out'+arg).innerHTML = ' Home Run!!!';
+            document.getElementById('out'+arg).style.color = '#6a60a9';
+        }else{
+            document.getElementById('out'+arg).innerHTML = " | strike : "+strike.length+", ball : "+ball.length;
+        }
+    }
+</script>
+</html>
